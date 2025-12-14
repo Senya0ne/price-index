@@ -1,0 +1,1 @@
+# SQLModel / ORM модель Product

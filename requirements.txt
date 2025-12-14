@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+psycopg2-binary
+redis
+httpx
+beautifulsoup4
+lxml
+python-dotenv
+python-telegram-bot
