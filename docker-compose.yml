@@ -17,6 +17,43 @@ services:
       - postgres
       - redis
 
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    container_name: price_bot
+    env_file:
+      - .env
+    environment:
+      - API_URL=http://price_api:8000/search/v2
+    depends_on:
+      - api
+
+  avito_worker:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: price_avito_worker
+    command: python -m app.workers.ingest_avito
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    restart: always
+
+  notifications_worker:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    container_name: price_notifications_worker
+    command: python -m app.workers.notifications
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - api
+    restart: always
+
   postgres:
     image: postgres:16
     container_name: price_postgres
